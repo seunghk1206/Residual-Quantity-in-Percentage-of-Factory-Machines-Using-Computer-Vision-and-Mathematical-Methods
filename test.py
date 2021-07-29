@@ -1,18 +1,19 @@
-import cv2 
-import numpy as np
-from matplotlib import pyplot as plt
-
-img = cv2.imread("blablabla.png")
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-hist = cv2.calcHist([gray],[0],None,[256],[0,256])
-colors = np.where(hist>5000)
-img_number = 0
-for color in colors[0]:
-    print(color)
-    split_image = img.copy()
-    split_image[np.where(gray != color)] = 0
-    cv2.imwrite(str(img_number)+".jpg",split_image)
-    img_number+=1
-plt.hist(gray.ravel(),256,[0,256])
-plt.savefig('plt')
-plt.show()
+percentageWhite = 0.11
+actualHeight = 20#cm
+actualSideLength = 100#cm
+cubicVol = actualHeight*actualSideLength**2
+pyramidalVol = (cubicVol*1.5-10*10*10)*1/3
+totalVolume = cubicVol+pyramidalVol
+cubicThreshold = 0.6
+pyramidalThreshold = 0.1
+if percentageWhite > cubicThreshold:
+    #20cm height
+    #rate of decrease
+    percentageHeight = ((percentageWhite-cubicThreshold)/(1-cubicThreshold))**(1/2)
+    print((percentageHeight*actualHeight*actualSideLength**2+pyramidalVol)/totalVolume)
+elif percentageWhite > pyramidalThreshold:
+    percentagePyramidal = (percentageWhite/cubicThreshold)
+    # 2a^2+b^2 = c^2 --> k(2a^2+b^2)^(1/2)= k c #a^2*b
+    print(pyramidalVol*(percentagePyramidal)/totalVolume)
+else:
+    print(0)
