@@ -1,49 +1,7 @@
-import numpy as np
-import cv2 as cv
-import collections
-img = cv.imread('expectedResult.png')
-Z = img.reshape((-1,3))
-# convert to np.float32
-Z = np.float32(Z)
-# define criteria, number of clusters(K) and apply kmeans()
-criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-K = 2
-ret,label,center=cv.kmeans(Z,K,None,criteria,10,cv.KMEANS_RANDOM_CENTERS)
-# Now convert back into uint8, and make original image
-center = np.uint8(center)
-res = center[label.flatten()]
-res2 = res.reshape((img.shape))
-cv.imshow('res2',res2)
-cv.waitKey(0)
-cv.destroyAllWindows()
+import PhotoKMeanFunc as PKMF
 
-gray = cv.cvtColor(res2, cv.COLOR_BGR2GRAY)
-gray = gray.ravel()
-alpha = collections.Counter(gray)
-summation = 0
-for key, value in alpha.items():
-    if max(alpha.keys()) > key:
-        pass
-    else:
-        numerator = value
-    summation += value
-percentageWhite = numerator/summation
-actualHeight = 20#cm
-actualSideLength = 100#cm
-cubicVol = actualHeight*actualSideLength**2
-pyramidalVol = (cubicVol*1.5-10*10*10)*1/3
-totalVolume = cubicVol+pyramidalVol
-cubicThreshold = 0.6
-pyramidalThreshold = 0.1
-if percentageWhite > cubicThreshold:
-    #20cm height
-    #rate of decrease
-    percentageHeight = ((percentageWhite-cubicThreshold)/(1-cubicThreshold))**(1/2)
-    print((percentageHeight*actualHeight*actualSideLength**2+pyramidalVol)/totalVolume)
-elif percentageWhite > pyramidalThreshold:
-    percentagePyramidal = (percentageWhite/cubicThreshold)
-    # 2a^2+b^2 = c^2 --> k(2a^2+b^2)^(1/2)= k c #a^2*b
-    print(pyramidalVol*(percentagePyramidal)/totalVolume)
-else:
-    print(0)
-
+Dir = 'expectedResult.png' # 쓰고싶은 사진의 구체적 위치
+actualHeight = 20 # 깔때기 직육면체 부분의 높이 센티미터로
+actualSideLength = 100 # 깔때기 직육면체 가로 세로 길이. 정사각형이라고 들었기에 1개 뿐
+cubicThreshold = 0.6 # 깔때기의 피라미드 부분만이 찼을때 찍힌 사진의 퍼센트
+PKMF.PhotoAnalysis(Dir, actualHeight, actualSideLength, cubicThreshold) # 함수 불러오기 구체적 정보는 PhotoKMeanFunc.py 참조바람
