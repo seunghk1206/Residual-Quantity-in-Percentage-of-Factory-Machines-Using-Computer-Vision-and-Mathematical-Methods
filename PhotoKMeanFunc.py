@@ -21,22 +21,20 @@ def PhotoAnalysis(Dir, actualHeight, actualSideLength, cubicThreshold):
     cv.destroyAllWindows()
 
     gray = cv.cvtColor(res2, cv.COLOR_BGR2GRAY)
-    gray = gray.ravel()
-    alpha = collections.Counter(gray)
-    summation = 0
+    gray = gray.ravel() # 회색 이미지로 변경
+    alpha = collections.Counter(gray) # 통계적 분석. 명확한 설명은 불필요.
+    summation = 0 # 변수 선언
     for key, value in alpha.items():
         if max(alpha.keys()) > key:
             pass
         else:
             numerator = value
         summation += value
-    percentageWhite = numerator/summation
-    cubicVol = actualHeight*actualSideLength**2
-    pyramidalVol = (cubicVol*1.5-10*10*10)*1/3
-    totalVolume = cubicVol+pyramidalVol
+    percentageWhite = numerator/summation # 사진에서의 하얀/회색 부분의 퍼센트.
+    cubicVol = actualHeight*actualSideLength**2 # 깔때기의 직육면체부분의 부피.
+    pyramidalVol = (cubicVol*1.5-10*10*10)*1/3 # 깔때기의 피라미드형 부분의 부피 구하는 식. 필요하면 변경 바람. 구체적인 부피를 써도 좋음.
+    totalVolume = cubicVol+pyramidalVol # 전체 깔때기의 부피
     if percentageWhite > cubicThreshold:
-        #20cm height
-        #rate of decrease
         percentageHeight = ((percentageWhite-cubicThreshold)/(1-cubicThreshold))**(1/2)
         return (percentageHeight*actualHeight*actualSideLength**2+pyramidalVol)/totalVolume
     else:
