@@ -22,9 +22,27 @@ gray = gray.ravel()
 alpha = collections.Counter(gray)
 summation = 0
 for key, value in alpha.items():
-    if key == 255:
+    if max(alpha.keys()) > key:
         pass
     else:
         numerator = value
     summation += value
-print(numerator/summation)
+percentageWhite = numerator/summation
+actualHeight = 20#cm
+actualSideLength = 100#cm
+cubicVol = actualHeight*actualSideLength**2
+pyramidalVol = (cubicVol*1.5-10*10*10)*1/3
+totalVolume = cubicVol+pyramidalVol
+cubicThreshold = 0.6
+pyramidalThreshold = 0.2
+if percentageWhite > cubicThreshold:
+    #20cm height
+    #rate of decrease
+    percentageHeight = ((percentageWhite-cubicThreshold))**(1/2)
+    print(((percentageHeight)*actualHeight*actualSideLength**2+pyramidalVol)/totalVolume)
+elif percentageWhite > pyramidalThreshold:
+    percentageSlantHeight = ((percentageWhite-pyramidalThreshold))**(1/2)
+    # 2a^2+b^2 = c^2 --> k(2a^2+b^2)^(1/2)= k c #a^2*b
+    print(pyramidalVol*(percentageSlantHeight**3)/totalVolume)
+else:
+    print(0)
