@@ -19,7 +19,7 @@ def PhotoAnalysis(Dir, actualHeight, actualSideLength, cubicThreshold):
     cv.imshow('res2',res2)
     cv.waitKey(0)
     cv.destroyAllWindows()
-
+    
     gray = cv.cvtColor(res2, cv.COLOR_BGR2GRAY)
     gray = gray.ravel() # 회색 이미지로 변경
     alpha = collections.Counter(gray) # 통계적 분석. 명확한 설명은 불필요.
