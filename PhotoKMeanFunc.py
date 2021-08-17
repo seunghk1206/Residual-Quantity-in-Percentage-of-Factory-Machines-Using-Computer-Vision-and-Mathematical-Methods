@@ -32,9 +32,10 @@ def PhotoAnalysis(Dir, actualHeight, actualSideLength, cubicThreshold):
         summation += value
     percentageWhite = numerator/summation # 사진에서의 하얀/회색 부분의 퍼센트.
     cubicVol = actualHeight*actualSideLength**2 # 깔때기의 직육면체부분의 부피.
-    pyramidalVol = (cubicVol*(48-actualHeight)/actualHeight-(actualSideLength*1/3)**3)*1/3 # 깔때기의 피라미드형 부분의 부피 구하는 식. 필요하면 변경 바람. 구체적인 부피를 써도 좋음.
+    pyramidalVol = (cubicVol*(56-actualHeight)/actualHeight-(actualSideLength*1/3)**3)*1/3 # 깔때기의 피라미드형 부분의 부피 구하는 식. 필요하면 변경 바람. 구체적인 부피를 써도 좋음.
     totalVolume = cubicVol+pyramidalVol # 전체 깔때기의 부피
-    if percentageWhite > cubicThreshold:
+    cubicThreshold = pyramidalVol/totalVolume
+    if percentageWhite >= cubicThreshold:
         percentageCube = cubicVol*(percentageWhite)**(1/2)
         return (percentageCube+pyramidalVol)/totalVolume
     else:
