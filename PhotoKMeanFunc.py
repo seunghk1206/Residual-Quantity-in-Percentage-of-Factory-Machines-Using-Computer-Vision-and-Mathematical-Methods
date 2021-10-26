@@ -1,7 +1,7 @@
 import numpy as np
 import cv2 as cv
 
-def PhotoAnalysis(Dir, actualHeight, actualSideLength, cubicThreshold):
+def PhotoAnalysis(Dir):
     img = cv.imread(Dir)
     lp = len(img)
     Z = img.reshape((-1,3))
@@ -54,38 +54,3 @@ def PhotoAnalysis(Dir, actualHeight, actualSideLength, cubicThreshold):
         return 75
     else:
         return 100
-    '''
-    for key, value in alpha.items():
-        if max(alpha.keys()) > key:
-            pass
-        else:
-            numerator = value
-        summation += value
-    percentageWhite = numerator/summation # 사진에서의 하얀/회색 부분의 퍼센트.
-    cubicVol = actualHeight*actualSideLength**2 # 깔때기의 직육면체부분의 부피.
-    pyramidalVol = (cubicVol*(56-actualHeight)/actualHeight-(actualSideLength*1/3)**3)*1/3 # 깔때기의 피라미드형 부분의 부피 구하는 식. 필요하면 변경 바람. 구체적인 부피를 써도 좋음.
-    totalVolume = cubicVol+pyramidalVol # 전체 깔때기의 부피
-    cubicThreshold = pyramidalVol/totalVolume
-    if percentageWhite >= cubicThreshold:
-        percentageCube = cubicVol*(percentageWhite)**(1/2)
-        yielded = (percentageCube+pyramidalVol)/totalVolume
-    else:
-        percentagePyramidal = pyramidalVol*(percentageWhite/cubicThreshold)**(3/2)
-        # 2a^2+b^2 = c^2 --> k(2a^2+b^2)^(1/2)= k c #a^2*b
-        yielded = percentagePyramidal/totalVolume
-    print(yielded)
-    if yielded >= 0.8:
-        return 0.25
-    elif 0.76 <= yielded < 0.8:
-        return 0.5
-    else:
-        for key, value in alpha.items():
-            if max(alpha.keys()) > key:
-                pass
-            else:
-                indi1[key]
-    '''
-
-
-def PhotoAnalysisDark(Dir, actualHeight, actualSideLength, cubicThreshold):#만약 깔때기에 넣는 물체가 깔때기의 색보다 어두울 경우에 쓰는 함수입니다.
-    return 1- PhotoAnalysis(Dir, actualHeight, actualSideLength, cubicThreshold)
