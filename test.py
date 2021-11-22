@@ -20,5 +20,5 @@ print(PhotoAnalysis(actualHeight, actualSideLength, cubicThreshold)) # 함수 �
 '''
 
 from PIL import Image
-img = Image.open('FronTechData/50-2.jpg').convert('L')
-img.save('greyscale50-2.png')
+img = Image.open('FronTechData/50-1.jpg').convert('L')
+img.save('greyscale50-1.png')
