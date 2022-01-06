@@ -1,7 +1,7 @@
 import numpy as np
 import cv2 as cv
 
-def PhotoAnalysis(Dir):
+def CorePhotoAnalysis(Dir):
     img = cv.imread(Dir)
     lp = len(img)
     #여기까지
@@ -14,7 +14,6 @@ def PhotoAnalysis(Dir):
     indi1 = dict(zip(unique, counts))# 특정 값의 픽셀의 갯수를 나타내는 딕셔너리
     unique, counts = np.unique(np.array([gray[each*lp+430] for each in range(lp)]), return_counts=True)
     indi2 = dict(zip(unique, counts))
-    print(indi1)
     for key, value in indi1.items():
         avg += key*value
         summation += value
@@ -26,19 +25,46 @@ def PhotoAnalysis(Dir):
     avg /= summation
     std2 = ((sum([(key-avg)**2*value for key, value in indi2.items()]))/summation)**(1/2)
     pixDevDisp = ((std+std2)/2)**2
+    return pixDevDisp
+
+def PhotoAnalysis(Dir, img0Dir):
+    img = cv.imread(Dir)
+    lp = len(img)
+    #여기까지
+    avg = 0
+    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    gray = gray.ravel() # 회색 이미지로 변경
+    summation = 0 # 변수 선언
+    #430, 582
+    unique, counts = np.unique(np.array([gray[each*lp+960] for each in range(lp)]), return_counts=True)
+    indi1 = dict(zip(unique, counts))# 특정 값의 픽셀의 갯수를 나타내는 딕셔너리
+    unique, counts = np.unique(np.array([gray[each*lp+430] for each in range(lp)]), return_counts=True)
+    indi2 = dict(zip(unique, counts))
+    for key, value in indi1.items():
+        avg += key*value
+        summation += value
+    avg /= summation
+    std = ((sum([(key-avg)**2*value for key, value in indi1.items()]))/summation)**(1/2)
+    for key, value in indi2.items():
+        avg += key*value
+        summation += value
+    avg /= summation
+    std2 = ((sum([(key-avg)**2*value for key, value in indi2.items()]))/summation)**(1/2)
+    pixDevDisp = ((std+std2)/2)**2
+    pixDevDisp0 = CorePhotoAnalysis(img0Dir)
     #return pixDevDisp
     
-    if pixDevDisp <= 2500:
+    if pixDevDisp-pixDevDisp0 <= 2500:
         return 10
-    elif pixDevDisp <= 2757:
+    elif pixDevDisp-pixDevDisp0 <= 2757:
         return 25
-    elif pixDevDisp <= 3037:
+    elif pixDevDisp-pixDevDisp0 <= 3037:
         return 50
-    elif pixDevDisp <= 3423:
+    elif pixDevDisp-pixDevDisp0 <= 3423:
         return 75
     else:
         return 100
-
+'''
 def PhotoAnalysis2(Dir):
     img = cv.imread(Dir)
     lp = len(img)
@@ -92,7 +118,7 @@ def PhotoAnalysis2(Dir):
         return 75
     else:
         return 100
-
+'''
 '''
     Z = img.reshape((-1,3))
     # convert to np.float32
