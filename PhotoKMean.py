@@ -6,11 +6,9 @@ FoldL = 'FronTechData/'
 DirL = ['10-1.jpg', '10-2.jpg', '10-4.jpg', '10-5.jpg', '10-6.jpg', '25-1.jpg', '25-2.jpg', '25-3.jpg', '25-4.jpg', '25-5.jpg', '50-1.jpg', '50-2.jpg', '50-3.jpg', '50-4.jpg', '50-5.jpg', '75-1.jpg', '75-2.jpg', '75-3.jpg', '75-4.jpg', '75-5.jpg', '100-1.jpg', '100-2.jpg', '100-3.jpg']
 LP = []
 avgT = 0
-print(PKMF.PhotoAnalysis(FoldL+'50-2.jpg'))
-'''
 for each in DirL:
     init = time.time()
-    LP.append(PKMF.PhotoAnalysis(FoldL+each))
+    LP.append(PKMF.PhotoAnalysis(FoldL+each, FoldL+'img0'))
     lin = time.time() - init
     avgT += lin
 avgT /= len(LP)
@@ -21,7 +19,7 @@ for i in range(len(ansL)):
     if LP[i] != ansL[i]:
         correct -= 1
 print(LP)
-'''
+print(correct/len(ansL))
 #10: 46~47
 #25: 51~52
 #50: 53~60!
